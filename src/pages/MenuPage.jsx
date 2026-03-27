@@ -44,111 +44,116 @@ export function MenuPage() {
       .filter((g) => g.items.length > 0);
   }, [categories, menuItems, searchResults, vegMode, searchQuery, isSearching]);
 
-  useCategorySync(setActiveCategory);
+  // Scroll sync: container scroll → update active category
+  useCategorySync("menu-container", setActiveCategory);
 
+  // Scroll to section using native scrollIntoView
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  // Category click → scroll to section
   const handleCategoryClick = (categoryName) => {
     const slug = slugify(categoryName);
     setActiveCategory(slug);
-    scrollToSection(slug);
+    setTimeout(() => scrollToSection(slug), 100);
   };
 
   return (
     <div className="menuLayout">
-      <div className="topSection">
-        <Header />
-        <div className="stickyHeader">
-          <div className="stickySearchRow">
-            <SearchBar />
-            <VegToggle />
+      <main id="menu-container" className="menuScroll hideScrollbar">
+        <div className="topSection">
+          <Header />
+          <div className="stickyHeader">
+            <div className="StickySearchRow">
+              <SearchBar />
+              <VegToggle />
+            </div>
           </div>
+          {!isSearching && (
+            <div className="categoryWrapper">
+              <CategorySlider
+                categories={categories}
+                activeCategory={activeCategory}
+                onCategoryClick={handleCategoryClick}
+              />
+            </div>
+          )}
         </div>
-        {!isSearching && (
-          <div className="categoryWrapper">
-            <CategorySlider
-              categories={categories}
-              activeCategory={activeCategory}
-              onCategoryClick={handleCategoryClick}
-            />
-          </div>
-        )}
-      </div>
 
-      {!isSearching && <HeroBanner />}
+        {!isSearching && <HeroBanner />}
 
-      <div className="container">
-        {(loading || searching) && (
-          <>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <div key={n} className="skeletonCard" />
-            ))}
-          </>
-        )}
+        <div className="container">
+          {(loading || searching) && (
+            <>
+              {[1, 2, 3, 4, 5].map((n) => (
+                <div key={n} className="skeletonCard" />
+              ))}
+            </>
+          )}
 
-        {!loading && !searching && error && (
-          <div className="emptyState">
-            <h2>Network issue</h2>
-            <p className="muted">Check your connection and try again.</p>
-            <button className="btn primary" onClick={refetch}>Try again</button>
-          </div>
-        )}
+          {!loading && !searching && error && (
+            <div className="emptyState">
+              <h2>Network issue</h2>
+              <p className="muted">Check your connection and try again.</p>
+              <button className="btn primary" onClick={refetch}>Try again</button>
+            </div>
+          )}
 
-        {!loading && !searching && !error && grouped.length > 0 && (
-          <div className="sections">
-            {grouped.map(({ category, items }) => (
-              <div
-                key={category.id}
-                id={slugify(category.name)}
-                data-category-section
-                className="menuSection"
-              >
-                <div className="sectionHeader">
-                  <h2>{category?.name ?? ""}</h2>
-                  <span className="muted">
-                    {`${items.length} item${items.length === 1 ? "" : "s"}`}
-                  </span>
+          {!loading && !searching && !error && grouped.length > 0 && (
+            <div className="sections">
+              {grouped.map(({ category, items }) => (
+                <div
+                  key={category.id}
+                  id={slugify(category.name)}
+                  data-category-section
+                  className="menuSection"
+                >
+                  <div className="sectionHeader">
+                    <h2>{category?.name ?? ""}</h2>
+                    <span className="muted">
+                      {`${items.length} item${items.length === 1 ? "" : "s"}`}
+                    </span>
+                  </div>
+                  {items.map((item) => (
+                    <MenuItemCard key={item.id} item={item} />
+                  ))}
                 </div>
-                {items.map((item) => (
-                  <MenuItemCard key={item.id} item={item} />
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        {!loading && !searching && !error && grouped.length === 0 && (
-          <div className="emptyState">
-            {isSearching ? (
-              <>
-                <div className="emptyIcon" aria-label="Search icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.35-4.35" />
-                    <path d="M8 11h6" />
-                  </svg>
-                </div>
-                <h2>No dishes found</h2>
-                <p className="muted">Try a different search term.</p>
-              </>
-            ) : menuItems.length === 0 ? (
-              <>
-                <h2>Menu loading...</h2>
-                <p className="muted">Waiting for menu data from Supabase.</p>
-              </>
-            ) : (
-              <>
-                <h2>No dishes found</h2>
-                <p className="muted">Try turning off Veg mode.</p>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+          {!loading && !searching && !error && grouped.length === 0 && (
+            <div className="emptyState">
+              {isSearching ? (
+                <>
+                  <div className="emptyIcon" aria-label="Search icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.35-4.35" />
+                      <path d="M8 11h6" />
+                    </svg>
+                  </div>
+                  <h2>No dishes found</h2>
+                  <p className="muted">Try a different search term.</p>
+                </>
+              ) : menuItems.length === 0 ? (
+                <>
+                  <h2>Menu loading...</h2>
+                  <p className="muted">Waiting for menu data from Supabase.</p>
+                </>
+              ) : (
+                <>
+                  <h2>No dishes found</h2>
+                  <p className="muted">Try turning off Veg mode.</p>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
