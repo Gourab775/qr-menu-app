@@ -47,17 +47,13 @@ export function MenuPage() {
   // ── Scroll sync: container scroll → update active category ──
   useCategorySync("menu-container", setActiveCategory);
 
-  // ── Category click → scroll to section (below sticky header) ──
+  // ── Category click → scroll to section ──
   const handleCategoryClick = (categoryName) => {
     const slug = slugify(categoryName);
-    const container = document.getElementById("menu-container");
     const el = document.getElementById(slug);
-    if (!container || !el) return;
+    if (!el) return;
     setActiveCategory(slug);
-    const sticky = container.querySelector(".stickyHeader");
-    const stickyH = sticky ? sticky.offsetHeight : 0;
-    const target = el.offsetTop - stickyH - 8;
-    container.scrollTo({ top: target, behavior: "smooth" });
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (

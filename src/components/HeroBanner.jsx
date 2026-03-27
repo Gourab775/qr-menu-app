@@ -5,7 +5,7 @@ const HOLD_DURATION = 3500;
 const TRANSITION_DURATION = 600;
 
 export function HeroBanner() {
-  const { featuredItems, categories } = useMenu();
+  const { featuredItems } = useMenu();
   const containerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const timerRef = useRef(null);
@@ -45,32 +45,14 @@ export function HeroBanner() {
     (redirectUrl) => {
       if (!redirectUrl) return;
 
-      if (redirectUrl.startsWith("#")) {
-        const selector = redirectUrl.substring(1);
-        const el = document.getElementById(selector);
+      const selector = redirectUrl.startsWith("#") 
+        ? redirectUrl.substring(1) 
+        : redirectUrl;
+      
+      const el = document.getElementById(selector);
 
-        if (el) {
-          const menuContainer = document.getElementById("menu-container");
-          const sticky = menuContainer?.querySelector(".stickyHeader");
-          const stickyH = sticky ? sticky.offsetHeight : 0;
-          const offset = 80;
-          const top = el.getBoundingClientRect().top + (menuContainer?.scrollTop ?? window.scrollY) - stickyH - offset;
-
-          menuContainer?.scrollTo({ top, behavior: "smooth" }) ??
-            window.scrollTo({ top, behavior: "smooth" });
-        }
-      } else {
-        const category = categories.find((c) => c.id === redirectUrl);
-        if (category) {
-          const section = document.getElementById(`category-${category.id}`);
-          if (section) {
-            const menuContainer = document.getElementById("menu-container");
-            const sticky = menuContainer?.querySelector(".stickyHeader");
-            const stickyH = sticky ? sticky.offsetHeight : 0;
-            const target = section.offsetTop - stickyH - 8;
-            menuContainer?.scrollTo({ top: target, behavior: "smooth" });
-          }
-        }
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
       if (timerRef.current) {
@@ -79,7 +61,7 @@ export function HeroBanner() {
       advanceSlide();
       timerRef.current = setInterval(advanceSlide, HOLD_DURATION + TRANSITION_DURATION);
     },
-    [categories, advanceSlide]
+    [advanceSlide]
   );
 
   if (itemCount === 0) return null;
