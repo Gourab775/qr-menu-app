@@ -149,7 +149,7 @@ body {
   align-items: center;
   justify-content: space-between;
   height: 60px;
-  padding: 0 14px;
+  padding: 0 16px;
   background: rgba(255,255,255,0.97);
   border-bottom: 1px solid rgba(17,24,39,0.06);
 }
@@ -322,9 +322,9 @@ body {
 /* ── Search row (inside sticky header) ── */
 .stickySearchRow {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
-  padding: 10px 14px 8px;
+  padding: 12px 16px 10px;
 }
 
 /* ── Premium dark search bar ── */
@@ -462,12 +462,14 @@ body {
 /* ── Category strip (modern pill style) ── */
 .catScroll {
   display: flex;
-  gap: 10px;
-  padding: 10px 12px 12px;
+  gap: 12px;
+  padding: 12px 16px 14px;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .catScroll::-webkit-scrollbar {
@@ -478,7 +480,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   flex: 0 0 auto;
   cursor: pointer;
   border: none;
@@ -526,14 +528,13 @@ body {
 /* ── Hero banner ── */
 /* ── Featured Section — full-width slide carousel ── */
 .featuredSection {
-  padding: 0;
   margin: 0;
 }
 
 .featuredCarousel {
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 200px;
   overflow: hidden;
   cursor: pointer;
 }
@@ -612,34 +613,37 @@ body {
 
 .menuScroll {
   flex: 1;
-  padding-bottom: 110px;
+  padding-bottom: 120px;
 }
 
 .container {
-  padding: 12px 14px;
+  padding: 8px 16px 16px;
 }
 
-.muted { color: var(--muted); font-size: 12px; }
+.muted { color: var(--muted); font-size: 12px; font-weight: 500; }
 
 /* ── Sections ── */
-.sections { display: flex; flex-direction: column; }
+.sections { display: flex; flex-direction: column; gap: 8px; }
 
 .menuSection {
-  scroll-margin-top: 100px;
-  padding-top: 20px;
+  scroll-margin-top: 180px;
+  padding-top: 16px;
 }
 
 .sectionHeader {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(17,24,39,0.06);
 }
 
 .sectionHeader h2 {
   margin: 0;
-  font-size: 17px;
-  font-weight: 900;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
 }
 
 .searchingDot {
@@ -659,28 +663,27 @@ body {
 /* ── Menu item card — single column, full width ── */
 .menuCard {
   display: flex;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 14px;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 16px;
   background: #fff;
-  border: 1px solid rgba(17,24,39,0.06);
-  box-shadow: 0 2px 10px rgba(17,24,39,0.06);
-  margin-bottom: 10px;
+  border: 1px solid rgba(17,24,39,0.05);
+  box-shadow: 0 1px 3px rgba(17,24,39,0.04);
   transition: box-shadow 180ms ease, transform 180ms ease;
   will-change: transform;
 }
 
 .menuCard:active {
-  transform: scale(0.985);
-  box-shadow: 0 1px 4px rgba(17,24,39,0.08);
+  transform: scale(0.99);
+  box-shadow: 0 2px 6px rgba(17,24,39,0.08);
 }
 
 .menuImgWrap {
-  width: 88px;
-  height: 88px;
-  border-radius: 12px;
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
   overflow: hidden;
-  background: #f2f2f2;
+  background: #f8f8f8;
   flex: 0 0 auto;
   position: relative;
 }
@@ -712,18 +715,19 @@ body {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .menuTop {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
 /* ── Veg / Non-veg dot ── */
 .vegDot {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   border-radius: 999px;
   background: #22c55e;
   border: 1.5px solid #bbf7d0;
@@ -736,15 +740,17 @@ body {
 }
 
 .menuName {
-  font-size: 14px;
-  font-weight: 900;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .menuPrice {
-  font-weight: 900;
+  font-weight: 800;
+  letter-spacing: -0.3px;
   color: var(--accent);
   font-size: 14px;
   margin-top: 4px;
