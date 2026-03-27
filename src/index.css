@@ -8,7 +8,6 @@ html {
   height: auto;
   min-height: 100%;
   overscroll-behavior: none;
-  scroll-behavior: smooth;
 }
 
 :root {
@@ -33,15 +32,6 @@ html {
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-}
-
-/* Hide scrollbar but keep scrolling */
-::-webkit-scrollbar {
-  display: none;
-}
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 body {
@@ -109,7 +99,7 @@ body {
 
 /* ── Page layout ── */
 .pageLayout {
-  min-height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--bg);
@@ -118,6 +108,8 @@ body {
 
 .pageLayout > main {
   flex: 1;
+  overflow-y: auto;
+  padding-bottom: 100px;
 }
 
 /* ── Top bar ── */
@@ -160,7 +152,7 @@ body {
   align-items: center;
   justify-content: space-between;
   height: 60px;
-  padding: 0 16px;
+  padding: 0 14px;
   background: rgba(255,255,255,0.97);
   border-bottom: 1px solid rgba(17,24,39,0.06);
 }
@@ -333,9 +325,9 @@ body {
 /* ── Search row (inside sticky header) ── */
 .stickySearchRow {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  padding: 12px 16px 10px;
+  padding: 10px 14px 8px;
 }
 
 /* ── Premium dark search bar ── */
@@ -473,14 +465,12 @@ body {
 /* ── Category strip (modern pill style) ── */
 .catScroll {
   display: flex;
-  gap: 12px;
-  padding: 12px 16px 14px;
+  gap: 10px;
+  padding: 10px 12px 12px;
   overflow-x: auto;
-  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
 }
 
 .catScroll::-webkit-scrollbar {

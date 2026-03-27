@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 function slugify(text) {
   return String(text ?? "")
@@ -9,12 +9,28 @@ function slugify(text) {
 }
 
 export function CategorySlider({ categories, activeCategory, onCategoryClick }) {
+  const isDragging = useRef(false);
+
   useEffect(() => {
     if (!activeCategory) return;
     const btn = document.getElementById(`cat-btn-${activeCategory}`);
     if (!btn) return;
     btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
   }, [activeCategory]);
+
+  const handleTouchStart = () => {
+    isDragging.current = false;
+  };
+
+  const handleTouchMove = () => {
+    isDragging.current = true;
+  };
+
+  const handleTouchEnd = (name) => {
+    if (!isDragging.current) {
+      onCategoryClick(name);
+    }
+  };
 
   if (!categories || categories.length === 0) return null;
 
@@ -30,6 +46,9 @@ export function CategorySlider({ categories, activeCategory, onCategoryClick }) 
               id={`cat-btn-${slug}`}
               className={`catPill ${isActive ? "catPill--active" : ""}`}
               onClick={() => onCategoryClick(c.name)}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={() => handleTouchEnd(c.name)}
               role="tab"
               aria-selected={isActive}
               aria-label={`${c.name} category`}
