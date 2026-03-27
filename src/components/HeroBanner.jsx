@@ -50,12 +50,12 @@ export function HeroBanner() {
         : redirectUrl;
       
       const el = document.getElementById(selector);
-      const container = document.getElementById("menu-container");
 
-      if (el && container) {
-        const sticky = container.querySelector(".stickyHeader");
-        const offset = sticky ? sticky.offsetHeight + 8 : 88;
-        container.scrollTo({ top: el.offsetTop - offset, behavior: "smooth" });
+      if (el) {
+        const headerOffset = 90;
+        const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
       }
 
       if (timerRef.current) {
@@ -79,6 +79,10 @@ export function HeroBanner() {
               key={item.id}
               className={`featuredSlide ${i === 0 ? "active" : ""}`}
               onClick={() => handleSlideClick(item.redirectUrl)}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                handleSlideClick(item.redirectUrl);
+              }}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleSlideClick(item.redirectUrl)}

@@ -30,6 +30,10 @@ export function CategorySlider({ categories, activeCategory, onCategoryClick }) 
               id={`cat-btn-${slug}`}
               className={`catPill ${isActive ? "catPill--active" : ""}`}
               onClick={() => onCategoryClick(c.name)}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                onCategoryClick(c.name);
+              }}
               role="tab"
               aria-selected={isActive}
               aria-label={`${c.name} category`}
