@@ -71,14 +71,16 @@ export function MenuPage() {
             <SearchBar />
             <VegToggle />
           </div>
-          {!isSearching && (
+        </div>
+        {!isSearching && (
+          <div className="categoryWrapper">
             <CategorySlider
               categories={categories}
               activeCategory={activeCategory}
               onCategoryClick={handleCategoryClick}
             />
-          )}
-        </div>
+          </div>
+        )}
 
         {!isSearching && <HeroBanner />}
 

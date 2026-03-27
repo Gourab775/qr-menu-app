@@ -9,6 +9,7 @@ export function HeroBanner() {
   const containerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const timerRef = useRef(null);
+  const isDragging = useRef(false);
 
   const items = featuredItems.length > 0 ? featuredItems : [];
   const itemCount = items.length;
@@ -64,6 +65,20 @@ export function HeroBanner() {
     [advanceSlide]
   );
 
+  const handleTouchStart = () => {
+    isDragging.current = false;
+  };
+
+  const handleTouchMove = () => {
+    isDragging.current = true;
+  };
+
+  const handleTouchEnd = (redirectUrl) => {
+    if (!isDragging.current) {
+      handleSlideClick(redirectUrl);
+    }
+  };
+
   if (itemCount === 0) return null;
 
   return (
@@ -76,7 +91,9 @@ export function HeroBanner() {
               key={item.id}
               className={`featuredSlide ${i === 0 ? "active" : ""}`}
               onClick={() => handleSlideClick(item.redirectUrl)}
-              onTouchEnd={() => handleSlideClick(item.redirectUrl)}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={() => handleTouchEnd(item.redirectUrl)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleSlideClick(item.redirectUrl)}

@@ -148,7 +148,8 @@ body {
 
 /* ── Header ── */
 .header {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 50;
   display: flex;
   align-items: center;
@@ -304,8 +305,8 @@ body {
 /* ── Sticky header ── */
 .stickyHeader {
   position: sticky;
-  top: 0;
-  z-index: 50;
+  top: 60px;
+  z-index: 40;
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px);
   transition: box-shadow 200ms ease;
@@ -314,6 +315,14 @@ body {
 .stickyHeader.scrolled {
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   border-bottom: 1px solid rgba(17,24,39,0.05);
+}
+
+/* ── Category wrapper (sticky below header) ── */
+.categoryWrapper {
+  position: sticky;
+  top: 120px;
+  z-index: 30;
+  background: rgba(255,255,255,0.97);
 }
 
 /* ── Search row (inside sticky header) ── */
@@ -483,6 +492,7 @@ body {
   padding: 0;
   outline: none;
   border-radius: 999px;
+  touch-action: pan-x;
 }
 
 .catPillImg {
