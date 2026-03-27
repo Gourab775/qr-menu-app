@@ -99,6 +99,8 @@ body {
   width: 100%;
   max-width: 480px;
   min-height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   position: relative;
   background: var(--bg);
   display: flex;
@@ -622,25 +624,21 @@ body {
 
 .menuScroll {
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 120px;
+  padding-bottom: 110px;
 }
 
 .container {
-  padding: 8px 16px 16px;
+  padding: 12px 14px;
 }
 
-.muted { color: var(--muted); font-size: 12px; font-weight: 500; }
+.muted { color: var(--muted); font-size: 12px; }
 
 /* ── Sections ── */
-.sections { display: flex; flex-direction: column; gap: 8px; }
+.sections { display: flex; flex-direction: column; }
 
-.menuSection,
-[data-category-section] {
+.menuSection {
   scroll-margin-top: 100px;
-  padding-top: 16px;
-  margin-bottom: 24px;
+  padding-top: 20px;
 }
 
 .sectionHeader {

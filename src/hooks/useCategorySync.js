@@ -1,29 +1,53 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export function useCategorySync(containerId, setActiveCategory) {
+  const tickingRef = useRef(false);
+  const lastActiveRef = useRef(null);
+
   useEffect(() => {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const sections = container.querySelectorAll("[data-category-section]");
+    const updateActiveCategory = () => {
+      const sections = container.querySelectorAll(".menuSection");
+      const sticky = container.querySelector(".stickyHeader");
+      const stickyHeight = sticky ? sticky.offsetHeight : 60;
+      const triggerPoint = stickyHeight + 80;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveCategory(entry.target.id);
-          }
-        });
-      },
-      {
-        root: container,
-        rootMargin: "-100px 0px -60% 0px",
-        threshold: 0,
+      let currentId = "";
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        const sectionTop = rect.top - containerRect.top + container.scrollTop;
+
+        if (container.scrollTop >= sectionTop - triggerPoint) {
+          currentId = section.id;
+        }
+      });
+
+      if (currentId && currentId !== lastActiveRef.current) {
+        lastActiveRef.current = currentId;
+        setActiveCategory(currentId);
       }
-    );
 
-    sections.forEach((sec) => observer.observe(sec));
+      tickingRef.current = false;
+    };
 
-    return () => observer.disconnect();
+    const handleScroll = () => {
+      if (!tickingRef.current) {
+        tickingRef.current = true;
+        requestAnimationFrame(updateActiveCategory);
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    requestAnimationFrame(updateActiveCategory);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
   }, [containerId, setActiveCategory]);
 }
