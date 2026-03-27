@@ -10,26 +10,23 @@ export function useCategorySync(containerId, setActiveCategory) {
 
     const updateActiveCategory = () => {
       const sections = container.querySelectorAll(".menuSection");
-      const sticky = container.querySelector(".stickyHeader");
-      const stickyHeight = sticky ? sticky.offsetHeight : 60;
-      const triggerPoint = stickyHeight + 80;
-
-      let currentId = "";
+      const headerOffset = 90;
+      let closestId = "";
+      let closestDistance = Infinity;
 
       sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
+        const distance = Math.abs(rect.top - headerOffset);
 
-        const sectionTop = rect.top - containerRect.top + container.scrollTop;
-
-        if (container.scrollTop >= sectionTop - triggerPoint) {
-          currentId = section.id;
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestId = section.id;
         }
       });
 
-      if (currentId && currentId !== lastActiveRef.current) {
-        lastActiveRef.current = currentId;
-        setActiveCategory(currentId);
+      if (closestId && closestId !== lastActiveRef.current) {
+        lastActiveRef.current = closestId;
+        setActiveCategory(closestId);
       }
 
       tickingRef.current = false;
