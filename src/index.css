@@ -631,7 +631,7 @@ body {
 .sections { display: flex; flex-direction: column; }
 
 .menuSection {
-  scroll-margin-top: 120px;
+  scroll-margin-top: 100px;
   padding-top: 20px;
 }
 

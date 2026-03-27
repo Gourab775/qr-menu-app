@@ -4,55 +4,6 @@ import { useMenu } from "../hooks/useMenu";
 const HOLD_DURATION = 3500;
 const TRANSITION_DURATION = 600;
 
-let isScrolling = false;
-let animationFrameId = null;
-
-const smoothScrollTo = (targetY, duration = 500) => {
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
-  }
-
-  isScrolling = true;
-
-  const startY = window.scrollY;
-  const difference = targetY - startY;
-  let startTime = null;
-
-  const step = (timestamp) => {
-    if (!startTime) startTime = timestamp;
-
-    const time = timestamp - startTime;
-    const percent = Math.min(time / duration, 1);
-
-    const ease =
-      percent < 0.5
-        ? 2 * percent * percent
-        : 1 - Math.pow(-2 * percent + 2, 2) / 2;
-
-    window.scrollTo(0, startY + difference * ease);
-
-    if (percent < 1 && isScrolling) {
-      animationFrameId = requestAnimationFrame(step);
-    } else {
-      isScrolling = false;
-    }
-  };
-
-  animationFrameId = requestAnimationFrame(step);
-};
-
-const stopScroll = () => {
-  isScrolling = false;
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
-  }
-};
-
-if (typeof window !== "undefined") {
-  window.addEventListener("touchstart", stopScroll);
-  window.addEventListener("wheel", stopScroll);
-}
-
 export function HeroBanner() {
   const { featuredItems } = useMenu();
   const containerRef = useRef(null);
@@ -101,10 +52,7 @@ export function HeroBanner() {
       const el = document.getElementById(selector);
 
       if (el) {
-        const headerOffset = 90;
-        const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerOffset;
-        smoothScrollTo(offsetPosition, 600);
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
       if (timerRef.current) {
