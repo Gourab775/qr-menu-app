@@ -18,15 +18,24 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
+let isScrolling = false;
+let animationFrameId = null;
+
 const smoothScrollTo = (targetY, duration = 500) => {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+
+  isScrolling = true;
+
   const startY = window.scrollY;
   const difference = targetY - startY;
   let startTime = null;
 
   const step = (timestamp) => {
     if (!startTime) startTime = timestamp;
-    const time = timestamp - startTime;
 
+    const time = timestamp - startTime;
     const percent = Math.min(time / duration, 1);
 
     const ease =
@@ -36,13 +45,27 @@ const smoothScrollTo = (targetY, duration = 500) => {
 
     window.scrollTo(0, startY + difference * ease);
 
-    if (time < duration) {
-      window.requestAnimationFrame(step);
+    if (percent < 1 && isScrolling) {
+      animationFrameId = requestAnimationFrame(step);
+    } else {
+      isScrolling = false;
     }
   };
 
-  window.requestAnimationFrame(step);
+  animationFrameId = requestAnimationFrame(step);
 };
+
+const stopScroll = () => {
+  isScrolling = false;
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+};
+
+if (typeof window !== "undefined") {
+  window.addEventListener("touchstart", stopScroll);
+  window.addEventListener("wheel", stopScroll);
+}
 
 export function MenuPage() {
   const { vegMode, searchQuery } = useCart();
