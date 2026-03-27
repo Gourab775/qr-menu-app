@@ -10,15 +10,6 @@ html {
   overscroll-behavior: none;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  height: auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
 :root {
   --bg: #f5f5f5;
   --card: #ffffff;
@@ -44,15 +35,15 @@ body {
 }
 
 body {
-  height: 100%;
-  min-height: 100svh;
+  height: auto;
   min-height: 100dvh;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  touch-action: auto;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
-  overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -113,7 +104,6 @@ body {
   flex-direction: column;
   background: var(--bg);
   position: relative;
-  overflow: hidden;
 }
 
 .pageLayout > main {
@@ -618,6 +608,8 @@ body {
 
 .menuScroll {
   flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 110px;
 }
 
