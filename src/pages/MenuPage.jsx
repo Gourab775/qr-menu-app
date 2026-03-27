@@ -64,23 +64,24 @@ export function MenuPage() {
   return (
     <div className="menuLayout">
       <main id="menu-container" className="menuScroll hideScrollbar">
-        <Header />
-
-        <div className="stickyHeader">
-          <div className="stickySearchRow">
-            <SearchBar />
-            <VegToggle />
+        <div className="topSection">
+          <Header />
+          <div className="stickyHeader">
+            <div className="stickySearchRow">
+              <SearchBar />
+              <VegToggle />
+            </div>
           </div>
+          {!isSearching && (
+            <div className="categoryWrapper">
+              <CategorySlider
+                categories={categories}
+                activeCategory={activeCategory}
+                onCategoryClick={handleCategoryClick}
+              />
+            </div>
+          )}
         </div>
-        {!isSearching && (
-          <div className="categoryWrapper">
-            <CategorySlider
-              categories={categories}
-              activeCategory={activeCategory}
-              onCategoryClick={handleCategoryClick}
-            />
-          </div>
-        )}
 
         {!isSearching && <HeroBanner />}
 

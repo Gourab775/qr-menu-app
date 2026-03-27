@@ -148,9 +148,6 @@ body {
 
 /* ── Header ── */
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -158,8 +155,6 @@ body {
   padding: 0 14px;
   background: rgba(255,255,255,0.97);
   border-bottom: 1px solid rgba(17,24,39,0.06);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .brand {
@@ -303,29 +298,28 @@ body {
   border: 2px solid #fff;
 }
 
+/* ── Top section (sticky header + search + categories) ── */
+.topSection {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
 /* ── Sticky header ── */
 .stickyHeader {
-  position: sticky;
-  top: 60px;
-  z-index: 90;
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px);
-  transition: box-shadow 200ms ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .stickyHeader.scrolled {
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(17,24,39,0.05);
+  box-shadow: none;
 }
 
-/* ── Category wrapper (sticky below header) ── */
+/* ── Category wrapper ── */
 .categoryWrapper {
-  position: sticky;
-  top: 120px;
-  z-index: 80;
   background: rgba(255,255,255,0.97);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 /* ── Search row (inside sticky header) ── */
