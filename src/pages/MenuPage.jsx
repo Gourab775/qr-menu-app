@@ -18,6 +18,32 @@ function slugify(text) {
     .replace(/^-+|-+$/g, "");
 }
 
+const smoothScrollTo = (targetY, duration = 500) => {
+  const startY = window.scrollY;
+  const difference = targetY - startY;
+  let startTime = null;
+
+  const step = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+    const time = timestamp - startTime;
+
+    const percent = Math.min(time / duration, 1);
+
+    const ease =
+      percent < 0.5
+        ? 2 * percent * percent
+        : 1 - Math.pow(-2 * percent + 2, 2) / 2;
+
+    window.scrollTo(0, startY + difference * ease);
+
+    if (time < duration) {
+      window.requestAnimationFrame(step);
+    }
+  };
+
+  window.requestAnimationFrame(step);
+};
+
 export function MenuPage() {
   const { vegMode, searchQuery } = useCart();
   const { categories, menuItems, loading, error, refetch } = useMenu();
@@ -47,14 +73,14 @@ export function MenuPage() {
   // ── Scroll sync: container scroll → update active category ──
   useCategorySync("menu-container", setActiveCategory);
 
-  // ── Scroll to section using window (mobile-friendly) ──
+  // ── Scroll to section using custom smooth animation ──
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
     const headerOffset = 90;
     const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
     const offsetPosition = elementPosition - headerOffset;
-    window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    smoothScrollTo(offsetPosition, 600);
   };
 
   // ── Category click → scroll to section ──

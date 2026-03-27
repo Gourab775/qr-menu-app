@@ -4,6 +4,32 @@ import { useMenu } from "../hooks/useMenu";
 const HOLD_DURATION = 3500;
 const TRANSITION_DURATION = 600;
 
+const smoothScrollTo = (targetY, duration = 500) => {
+  const startY = window.scrollY;
+  const difference = targetY - startY;
+  let startTime = null;
+
+  const step = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+    const time = timestamp - startTime;
+
+    const percent = Math.min(time / duration, 1);
+
+    const ease =
+      percent < 0.5
+        ? 2 * percent * percent
+        : 1 - Math.pow(-2 * percent + 2, 2) / 2;
+
+    window.scrollTo(0, startY + difference * ease);
+
+    if (time < duration) {
+      window.requestAnimationFrame(step);
+    }
+  };
+
+  window.requestAnimationFrame(step);
+};
+
 export function HeroBanner() {
   const { featuredItems } = useMenu();
   const containerRef = useRef(null);
@@ -55,7 +81,7 @@ export function HeroBanner() {
         const headerOffset = 90;
         const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - headerOffset;
-        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        smoothScrollTo(offsetPosition, 600);
       }
 
       if (timerRef.current) {

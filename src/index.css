@@ -5,7 +5,6 @@
 @tailwind utilities;
 
 html {
-  scroll-behavior: smooth;
   height: auto;
   min-height: 100%;
   overscroll-behavior: none;
@@ -474,7 +473,6 @@ body {
   padding: 10px 12px 12px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
