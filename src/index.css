@@ -150,7 +150,7 @@ body {
 .header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -159,6 +159,7 @@ body {
   background: rgba(255,255,255,0.97);
   border-bottom: 1px solid rgba(17,24,39,0.06);
   backdrop-filter: blur(12px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .brand {
@@ -306,10 +307,11 @@ body {
 .stickyHeader {
   position: sticky;
   top: 60px;
-  z-index: 40;
+  z-index: 90;
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px);
   transition: box-shadow 200ms ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .stickyHeader.scrolled {
@@ -321,8 +323,9 @@ body {
 .categoryWrapper {
   position: sticky;
   top: 120px;
-  z-index: 30;
+  z-index: 80;
   background: rgba(255,255,255,0.97);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 /* ── Search row (inside sticky header) ── */
@@ -610,7 +613,7 @@ body {
 
 /* ── Menu layout ── */
 .menuLayout {
-  min-height: 100%;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--bg);
@@ -618,8 +621,6 @@ body {
 
 .menuScroll {
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding-bottom: 110px;
 }
 
