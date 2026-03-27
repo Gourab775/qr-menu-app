@@ -50,9 +50,12 @@ export function HeroBanner() {
         : redirectUrl;
       
       const el = document.getElementById(selector);
+      const container = document.getElementById("menu-container");
 
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (el && container) {
+        const sticky = container.querySelector(".stickyHeader");
+        const offset = sticky ? sticky.offsetHeight + 8 : 88;
+        container.scrollTo({ top: el.offsetTop - offset, behavior: "smooth" });
       }
 
       if (timerRef.current) {

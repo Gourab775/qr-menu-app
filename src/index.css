@@ -610,6 +610,7 @@ body {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scroll-behavior: smooth;
   padding-bottom: 110px;
 }
 

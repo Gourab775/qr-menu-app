@@ -47,13 +47,21 @@ export function MenuPage() {
   // ── Scroll sync: container scroll → update active category ──
   useCategorySync("menu-container", setActiveCategory);
 
+  // ── Scroll to section within container ──
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    const container = document.getElementById("menu-container");
+    if (!el || !container) return;
+    const sticky = container.querySelector(".stickyHeader");
+    const offset = sticky ? sticky.offsetHeight + 8 : 88;
+    container.scrollTo({ top: el.offsetTop - offset, behavior: "smooth" });
+  };
+
   // ── Category click → scroll to section ──
   const handleCategoryClick = (categoryName) => {
     const slug = slugify(categoryName);
-    const el = document.getElementById(slug);
-    if (!el) return;
     setActiveCategory(slug);
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToSection(slug);
   };
 
   return (
