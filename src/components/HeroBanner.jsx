@@ -79,10 +79,7 @@ export function HeroBanner() {
               key={item.id}
               className={`featuredSlide ${i === 0 ? "active" : ""}`}
               onClick={() => handleSlideClick(item.redirectUrl)}
-              onTouchEnd={(e) => {
-                e.preventDefault();
-                handleSlideClick(item.redirectUrl);
-              }}
+              onTouchEnd={() => handleSlideClick(item.redirectUrl)}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && handleSlideClick(item.redirectUrl)}
