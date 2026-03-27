@@ -93,6 +93,7 @@ body {
   display: flex;
   justify-content: center;
   background: #e9e9e9;
+  overflow-y: auto;
 }
 
 .phoneFrame {
@@ -101,22 +102,13 @@ body {
   min-height: 100dvh;
   position: relative;
   background: var(--bg);
-  display: flex;
-  flex-direction: column;
 }
 
 /* ── Page layout ── */
 .pageLayout {
   min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   background: var(--bg);
   position: relative;
-}
-
-.pageLayout > main {
-  flex: 1;
-  padding-bottom: 100px;
 }
 
 /* ── Top bar ── */
@@ -622,7 +614,6 @@ body {
 }
 
 .menuScroll {
-  flex: 1;
   padding-bottom: 120px;
 }
 

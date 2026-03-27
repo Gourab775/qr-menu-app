@@ -1,11 +1,8 @@
 import { useEffect } from "react";
 
-export function useCategorySync(containerId, setActiveCategory) {
+export function useCategorySync(setActiveCategory) {
   useEffect(() => {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const sections = container.querySelectorAll("[data-category-section]");
+    const sections = document.querySelectorAll("[data-category-section]");
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -16,8 +13,7 @@ export function useCategorySync(containerId, setActiveCategory) {
         });
       },
       {
-        root: container,
-        rootMargin: "-100px 0px -60% 0px",
+        rootMargin: "-80px 0px -70% 0px",
         threshold: 0,
       }
     );
@@ -25,5 +21,5 @@ export function useCategorySync(containerId, setActiveCategory) {
     sections.forEach((sec) => observer.observe(sec));
 
     return () => observer.disconnect();
-  }, [containerId, setActiveCategory]);
+  }, [setActiveCategory]);
 }
