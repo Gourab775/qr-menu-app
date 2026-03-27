@@ -109,6 +109,7 @@ export function MenuPage() {
                   <div
                     key={category.id}
                     id={slugify(category.name)}
+                    data-category-section
                     className="menuSection"
                   >
                     <div className="sectionHeader">

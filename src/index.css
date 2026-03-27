@@ -8,6 +8,7 @@ html {
   height: auto;
   min-height: 100%;
   overscroll-behavior: none;
+  scroll-behavior: smooth;
 }
 
 :root {
@@ -32,6 +33,15 @@ html {
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+}
+
+/* Hide scrollbar but keep scrolling */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 body {
@@ -513,16 +523,16 @@ body {
 }
 
 .catPillName {
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(17,24,39,0.5);
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(17,24,39,0.6);
   transition: color 200ms ease, font-weight 200ms ease;
   white-space: nowrap;
 }
 
 .catPill--active .catPillName {
   color: var(--accent);
-  font-weight: 900;
+  font-weight: 800;
 }
 
 /* ── Hero banner ── */
@@ -625,9 +635,11 @@ body {
 /* ── Sections ── */
 .sections { display: flex; flex-direction: column; gap: 8px; }
 
-.menuSection {
-  scroll-margin-top: 180px;
+.menuSection,
+[data-category-section] {
+  scroll-margin-top: 100px;
   padding-top: 16px;
+  margin-bottom: 24px;
 }
 
 .sectionHeader {
