@@ -606,7 +606,6 @@ body {
 
 /* ── Menu layout ── */
 .menuLayout {
-  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--bg);
@@ -614,6 +613,8 @@ body {
 
 .menuScroll {
   flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 110px;
 }
 
