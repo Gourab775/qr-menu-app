@@ -212,7 +212,7 @@ function CartItemCard({ item, onRemove, onIncrease, onDecrease }) {
             onClick={() => onRemove(item)}
             aria-label={`Remove ${item.name}`}
           >
-            ✕
+            Remove
           </button>
         </div>
 

@@ -972,6 +972,35 @@ body {
   padding-top: 12px;
 }
 
+.noteSection {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.noteInput {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(17,24,39,0.1);
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  resize: none;
+  outline: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+  box-shadow: 0 1px 3px rgba(17,24,39,0.04);
+}
+
+.noteInput::placeholder {
+  color: var(--muted);
+}
+
+.noteInput:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,122,24,0.1);
+}
+
 .cartCard {
   display: flex;
   gap: 12px;
@@ -1029,20 +1058,22 @@ body {
 }
 
 .removeBtn {
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
   border: none;
   background: transparent;
-  color: #9ca3af;
+  color: rgba(17,24,39,0.45);
   cursor: pointer;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   flex-shrink: 0;
-  display: grid;
-  place-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 150ms ease, background 150ms ease;
 }
 
-.removeBtn:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
+.removeBtn:hover {
+  background: rgba(239,68,68,0.08);
+  color: #ef4444;
+}
 
 .cartCardBottom {
   display: flex;

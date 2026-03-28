@@ -6,6 +6,8 @@ import { RESTAURANT_ID } from "../utils/constants";
 import { supabase } from "../lib/supabaseClient";
 import { Toast } from "../components/Toast";
 
+const CART_NOTE_KEY = "cart_order_note";
+
 export function CheckoutPage() {
   const [, navigate] = useLocation();
   const { cart, subtotal, tax, grandTotal, clearCart } = useCart();
@@ -13,6 +15,7 @@ export function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
   const [toastType, setToastType] = useState("success");
+  const [orderNote] = useState(() => sessionStorage.getItem(CART_NOTE_KEY) || "");
   const debounceRef = useRef(false);
 
   const showToast = useCallback((msg, type = "success") => {
@@ -40,9 +43,11 @@ export function CheckoutPage() {
           items: cart,
           totalPrice: grandTotal,
           paymentMode,
+          note: orderNote || null,
         });
 
         clearCart();
+        sessionStorage.removeItem(CART_NOTE_KEY);
         navigate("/order-success");
       } catch (err) {
         const message = err?.message ?? "Something went wrong. Please try again.";
@@ -52,7 +57,7 @@ export function CheckoutPage() {
         setLoading(false);
       }
     },
-    [cart, grandTotal, clearCart, navigate, showToast]
+    [cart, grandTotal, clearCart, navigate, showToast, orderNote]
   );
 
   const payCounter = () => place("counter");
@@ -74,6 +79,7 @@ export function CheckoutPage() {
         total_price: grandTotal,
         payment_mode: "online",
         status: "pending",
+        note: orderNote || null,
         items: cart.map((item) => ({
           id: String(item.id ?? ""),
           name: String(item.name ?? "Unknown Item"),
@@ -95,6 +101,7 @@ export function CheckoutPage() {
       console.log("[Checkout] Order created:", data);
 
       clearCart();
+      sessionStorage.removeItem(CART_NOTE_KEY);
       navigate(`/payment?orderId=${encodeURIComponent(orderCode)}&amount=${encodeURIComponent(grandTotal)}`);
     } catch (err) {
       const message = err?.message ?? "Something went wrong. Please try again.";

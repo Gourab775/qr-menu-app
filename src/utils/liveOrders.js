@@ -8,9 +8,10 @@ import { supabase, isSupabaseConfigured } from "../lib/supabaseClient";
  * @param {Array}   params.items         - cart items [{ id, name, price, quantity, isVeg }]
  * @param {number}  params.totalPrice   - must be a number
  * @param {"counter"|"online"} params.paymentMode
+ * @param {string|null} params.note - optional order note
  * @returns {Promise<{ orderId: string }>}
  */
-export async function placeOrder({ restaurantId, items, totalPrice, paymentMode }) {
+export async function placeOrder({ restaurantId, items, totalPrice, paymentMode, note = null }) {
   if (!isSupabaseConfigured || !supabase) {
     throw new Error(
       "Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
@@ -43,6 +44,7 @@ export async function placeOrder({ restaurantId, items, totalPrice, paymentMode 
     total_price: safeTotal,
     payment_mode: paymentMode,
     status: "pending",
+    note: note || null,
     items: items.map((item) => ({
       id: String(item.id ?? ""),
       name: String(item.name ?? "Unknown Item"),
