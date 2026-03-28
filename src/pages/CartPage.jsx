@@ -3,6 +3,8 @@ import { useLocation } from "wouter";
 import { useCart } from "../hooks/useCart";
 import { Toast } from "../components/Toast";
 
+const CART_NOTE_KEY = "cart_order_note";
+
 export function CartPage() {
   const [, navigate] = useLocation();
   const {
@@ -18,6 +20,15 @@ export function CartPage() {
 
   const [toastMsg, setToastMsg] = useState("");
   const [toastType, setToastType] = useState("success");
+  const [orderNote, setOrderNote] = useState(() => {
+    return sessionStorage.getItem(CART_NOTE_KEY) || "";
+  });
+
+  const handleNoteChange = useCallback((e) => {
+    const value = e.target.value;
+    setOrderNote(value);
+    sessionStorage.setItem(CART_NOTE_KEY, value);
+  }, []);
 
   const showToast = useCallback((msg, type = "success") => {
     setToastMsg(msg);
@@ -34,6 +45,8 @@ export function CartPage() {
 
   const handleClear = useCallback(() => {
     clearCart();
+    sessionStorage.removeItem(CART_NOTE_KEY);
+    setOrderNote("");
     showToast("Cart cleared");
   }, [clearCart, showToast]);
 
@@ -105,6 +118,18 @@ export function CartPage() {
           ))}
         </div>
 
+        {/* ── Add Note ── */}
+        <div className="noteSection">
+          <textarea
+            className="noteInput"
+            placeholder="Add note for your order..."
+            value={orderNote}
+            onChange={handleNoteChange}
+            rows={2}
+            aria-label="Order note"
+          />
+        </div>
+
         {/* ── Bill summary ── */}
         <div className="billCard">
           <h3 className="billTitle">Bill Summary</h3>
@@ -131,7 +156,10 @@ export function CartPage() {
       <div className="stickyCta">
         <button
           className="ctaBtn primary pressable"
-          onClick={() => navigate("/checkout")}
+          onClick={() => {
+            sessionStorage.setItem(CART_NOTE_KEY, orderNote);
+            navigate("/checkout");
+          }}
           aria-label="Proceed to checkout"
         >
           <span>Proceed to Checkout</span>
