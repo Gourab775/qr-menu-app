@@ -4,6 +4,12 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 const CartContext = createContext(null);
 const STORAGE_KEY = "qr_menu_cart";
 const LEGACY_STORAGE_KEY = "qr-menu-cart";
+const TABLE_KEY = "tableId";
+
+function getTableId() {
+  if (typeof window === "undefined") return null;
+  return sessionStorage.getItem(TABLE_KEY);
+}
 
 function safeParse(raw) {
   try {
@@ -15,11 +21,13 @@ function safeParse(raw) {
 
 function loadCart() {
   if (typeof window === "undefined") return [];
+  const tableId = sessionStorage.getItem(TABLE_KEY);
   const parsed = safeParse(window.localStorage.getItem(STORAGE_KEY));
   if (parsed && typeof parsed === "object" && Array.isArray(parsed.items)) {
     return parsed.items.map((i) => ({
       ...i,
       imageUrl: i.imageUrl ?? i.image_url ?? i.imageUrl,
+      table: i.table ?? tableId ?? null,
     }));
   }
 
@@ -29,6 +37,7 @@ function loadCart() {
     return legacy.map((i) => ({
       ...i,
       imageUrl: i.imageUrl ?? i.image_url ?? i.imageUrl,
+      table: tableId ?? null,
     }));
   }
 
@@ -43,6 +52,7 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     try {
+      const tableId = getTableId();
       const payload = {
         items: cart.map((i) => ({
           id: i.id,
@@ -50,6 +60,7 @@ export function CartProvider({ children }) {
           price: i.price,
           quantity: i.quantity ?? 0,
           image_url: i.imageUrl ?? i.image_url ?? "",
+          table: i.table ?? tableId ?? null,
         })),
       };
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
@@ -59,6 +70,7 @@ export function CartProvider({ children }) {
   }, [cart]);
 
   const addToCart = (item) => {
+    const tableId = getTableId();
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
@@ -66,22 +78,24 @@ export function CartProvider({ children }) {
           i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
-      return [...prev, { ...item, quantity: 1 }];
+      return [...prev, { ...item, quantity: 1, table: tableId }];
     });
   };
 
   const increaseQty = (itemId) => {
+    const tableId = getTableId();
     setCart((prev) =>
-      prev.map((i) => (i.id === itemId ? { ...i, quantity: i.quantity + 1 } : i))
+      prev.map((i) => (i.id === itemId ? { ...i, quantity: i.quantity + 1, table: i.table || tableId } : i))
     );
   };
 
   const decreaseQty = (itemId) => {
+    const tableId = getTableId();
     setCart((prev) => {
       const existing = prev.find((i) => i.id === itemId);
       if (existing && existing.quantity > 1) {
         return prev.map((i) =>
-          i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i
+          i.id === itemId ? { ...i, quantity: i.quantity - 1, table: i.table || tableId } : i
         );
       }
       return prev.filter((i) => i.id !== itemId);
