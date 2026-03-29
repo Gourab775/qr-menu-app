@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
 const TableContext = createContext(null);
 
@@ -12,8 +12,17 @@ export function TableProvider({ children, tableId }) {
     return sessionStorage.getItem("tableId") || null;
   });
 
+  const updateTableId = useCallback((newTableId) => {
+    setCurrentTableId(newTableId);
+    if (newTableId) {
+      sessionStorage.setItem("tableId", newTableId);
+    } else {
+      sessionStorage.removeItem("tableId");
+    }
+  }, []);
+
   return (
-    <TableContext.Provider value={{ tableId: currentTableId, setTableId: setCurrentTableId }}>
+    <TableContext.Provider value={{ tableId: currentTableId, setTableId: updateTableId }}>
       {children}
     </TableContext.Provider>
   );

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useParams } from "wouter";
 import { CartProvider } from "./hooks/useCart";
 import { MenuProvider } from "./store/menuStore";
 import { TableProvider, useTable } from "./context/TableContext";
@@ -13,9 +13,16 @@ import { TableRequiredPage } from "./pages/TableRequiredPage";
 import { CartBar } from "./components/CartBar";
 
 function AppRoutes() {
-  const { tableId } = useTable();
+  const { tableId: urlTableId } = useParams();
+  const { tableId: contextTableId, setTableId } = useTable();
 
-  if (!tableId) {
+  if (urlTableId && urlTableId !== contextTableId) {
+    setTableId(urlTableId);
+  }
+
+  const hasTable = urlTableId || contextTableId;
+
+  if (!hasTable) {
     return <TableRequiredPage />;
   }
 
