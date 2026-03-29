@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams } from "wouter";
 import { Header } from "../components/Header";
 import { SearchBar } from "../components/SearchBar";
@@ -10,7 +10,6 @@ import { useMenu } from "../hooks/useMenu";
 import { useMenuSearch } from "../hooks/useMenuSearch";
 import { useCart } from "../hooks/useCart";
 import { useCategorySync } from "../hooks/useCategorySync";
-import { useTable } from "../context/TableContext";
 
 function slugify(text) {
   return String(text ?? "")
@@ -21,13 +20,13 @@ function slugify(text) {
 }
 
 export function MenuPage() {
-  const { tableId: urlTableId } = useParams();
-  const { tableId: contextTableId } = useTable();
-  const tableId = urlTableId || contextTableId;
+  const { tableId } = useParams();
 
-  if (tableId) {
-    sessionStorage.setItem("tableId", tableId);
-  }
+  useEffect(() => {
+    if (tableId) {
+      sessionStorage.setItem("tableId", tableId);
+    }
+  }, [tableId]);
 
   const { vegMode, searchQuery } = useCart();
   const { categories, menuItems, loading, error, refetch } = useMenu();

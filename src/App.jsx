@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { Route, Switch, useParams } from "wouter";
+import { Route, Switch, useRoute, useLocation } from "wouter";
 import { CartProvider } from "./hooks/useCart";
 import { MenuProvider } from "./store/menuStore";
-import { TableProvider, useTable } from "./context/TableContext";
 import { MenuPage } from "./pages/MenuPage";
 import { CartPage } from "./pages/CartPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
@@ -13,17 +12,21 @@ import { TableRequiredPage } from "./pages/TableRequiredPage";
 import { CartBar } from "./components/CartBar";
 
 function AppRoutes() {
-  const { tableId: urlTableId } = useParams();
-  const { tableId: contextTableId, setTableId } = useTable();
+  const [isTableRoute, params] = useRoute("/t/:tableId");
+  const [location] = useLocation();
 
-  if (urlTableId && urlTableId !== contextTableId) {
-    setTableId(urlTableId);
+  useEffect(() => {
+    if (params?.tableId) {
+      sessionStorage.setItem("tableId", params.tableId);
+    }
+  }, [params?.tableId]);
+
+  if (!isTableRoute && location === "/") {
+    return <TableRequiredPage />;
   }
 
-  const hasTable = urlTableId || contextTableId;
-
-  if (!hasTable) {
-    return <TableRequiredPage />;
+  if (!isTableRoute && location !== "/") {
+    return <NotFoundPage />;
   }
 
   return (
@@ -62,13 +65,11 @@ export default function App() {
   return (
     <CartProvider>
       <MenuProvider>
-        <TableProvider>
-          <div className="appBackdrop">
-            <div className="phoneFrame">
-              <AppRoutes />
-            </div>
+        <div className="appBackdrop">
+          <div className="phoneFrame">
+            <AppRoutes />
           </div>
-        </TableProvider>
+        </div>
       </MenuProvider>
     </CartProvider>
   );
