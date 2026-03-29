@@ -51,7 +51,7 @@ function AppRoutes() {
     return <NotFoundPage />;
   }
 
-  const showCartBar = isTableRoute;
+  const showCartBar = isTableRoute || isCartRoute;
 
   return (
     <>

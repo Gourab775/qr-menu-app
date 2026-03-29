@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useCart } from "../hooks/useCart";
 import { placeOrder } from "../utils/liveOrders";
 import { RESTAURANT_ID } from "../utils/constants";
@@ -10,6 +10,9 @@ const CART_NOTE_KEY = "cart_order_note";
 
 export function CheckoutPage() {
   const [, navigate] = useLocation();
+  const { tableId } = useParams();
+  const storedTableId = typeof window !== "undefined" ? localStorage.getItem("tableId") : null;
+  const currentTableId = tableId || storedTableId;
   const { cart, subtotal, tax, grandTotal, clearCart } = useCart();
 
   const [loading, setLoading] = useState(false);
@@ -48,7 +51,7 @@ export function CheckoutPage() {
 
         clearCart();
         sessionStorage.removeItem(CART_NOTE_KEY);
-        navigate("/order-success");
+        navigate(`/t/${currentTableId}/order-success`);
       } catch (err) {
         const message = err?.message ?? "Something went wrong. Please try again.";
         showToast(message, "error");
@@ -102,7 +105,7 @@ export function CheckoutPage() {
 
       clearCart();
       sessionStorage.removeItem(CART_NOTE_KEY);
-      navigate(`/payment?orderId=${encodeURIComponent(orderCode)}&amount=${encodeURIComponent(grandTotal)}`);
+      navigate(`/t/${currentTableId}/payment?orderId=${encodeURIComponent(orderCode)}&amount=${encodeURIComponent(grandTotal)}`);
     } catch (err) {
       const message = err?.message ?? "Something went wrong. Please try again.";
       showToast(message, "error");
@@ -117,7 +120,7 @@ export function CheckoutPage() {
       <header className="topBar">
         <button
           className="iconBtn pressable"
-          onClick={() => navigate("/cart")}
+          onClick={() => navigate(`/t/${currentTableId}/cart`)}
           aria-label="Back to cart"
         >
           ←

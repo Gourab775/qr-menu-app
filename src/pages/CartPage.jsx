@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useCart } from "../hooks/useCart";
 import { Toast } from "../components/Toast";
 
@@ -7,6 +7,9 @@ const CART_NOTE_KEY = "cart_order_note";
 
 export function CartPage() {
   const [, navigate] = useLocation();
+  const { tableId } = useParams();
+  const storedTableId = typeof window !== "undefined" ? localStorage.getItem("tableId") : null;
+  const currentTableId = tableId || storedTableId;
   const {
     cart,
     increaseQty,
@@ -158,7 +161,7 @@ export function CartPage() {
           className="ctaBtn primary pressable"
           onClick={() => {
             sessionStorage.setItem(CART_NOTE_KEY, orderNote);
-            navigate("/checkout");
+            navigate(`/t/${currentTableId}/checkout`);
           }}
           aria-label="Proceed to checkout"
         >

@@ -1,9 +1,12 @@
-import { useLocation } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useCart } from "../hooks/useCart";
 import { useMenu } from "../hooks/useMenu";
 
 export function Header() {
   const [, navigate] = useLocation();
+  const { tableId } = useParams();
+  const storedTableId = typeof window !== "undefined" ? localStorage.getItem("tableId") : null;
+  const currentTableId = tableId || storedTableId;
   const { totalItems } = useCart();
   const { restaurant, restaurantLoading, restaurantError } = useMenu();
 
@@ -11,7 +14,7 @@ export function Header() {
 
   return (
     <header className="header">
-      <button className="brand" onClick={() => navigate("/")} aria-label="Go to menu">
+      <button className="brand" onClick={() => navigate(`/t/${currentTableId}`)} aria-label="Go to menu">
         <div className="brandLogoWrap">
           {restaurantLoading ? (
             <span className="brandLogoInitial" aria-hidden="true">
@@ -52,7 +55,7 @@ export function Header() {
 
       <button
         className="cartBtn pressable"
-        onClick={() => navigate("/cart")}
+        onClick={() => navigate(`/t/${currentTableId}/cart`)}
         aria-label={`Open cart — ${totalItems} item${totalItems === 1 ? "" : "s"}`}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
