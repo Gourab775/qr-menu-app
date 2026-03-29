@@ -11,36 +11,60 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { TableRequiredPage } from "./pages/TableRequiredPage";
 import { CartBar } from "./components/CartBar";
 
+const TABLE_KEY = "tableId";
+
+function getStoredTableId() {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(TABLE_KEY);
+}
+
 function AppRoutes() {
-  const [isTableRoute, params] = useRoute("/t/:tableId");
-  const [location] = useLocation();
+  const [isTableRoute, tableParams] = useRoute("/t/:tableId");
+  const [isCartRoute, cartParams] = useRoute("/t/:tableId/cart");
+  const [isCheckoutRoute] = useRoute("/t/:tableId/checkout");
+  const [isPaymentRoute] = useRoute("/t/:tableId/payment");
+  const [isOrderSuccessRoute] = useRoute("/t/:tableId/order-success");
+  const [location, setLocation] = useLocation();
+
+  const tableId = tableParams?.tableId || cartParams?.tableId;
 
   useEffect(() => {
-    if (params?.tableId) {
-      sessionStorage.setItem("tableId", params.tableId);
+    const stored = getStoredTableId();
+    if (!isTableRoute && !isCartRoute && !isCheckoutRoute && !isPaymentRoute && !isOrderSuccessRoute) {
+      if (stored && location === "/") {
+        setLocation(`/t/${stored}`);
+      }
     }
-  }, [params?.tableId]);
+  }, [location, isTableRoute, isCartRoute, isCheckoutRoute, isPaymentRoute, isOrderSuccessRoute, setLocation]);
 
-  if (!isTableRoute && location === "/") {
+  useEffect(() => {
+    if (tableId) {
+      localStorage.setItem(TABLE_KEY, tableId);
+    }
+  }, [tableId]);
+
+  if (!isTableRoute && !isCartRoute && !isCheckoutRoute && !isPaymentRoute && !isOrderSuccessRoute && location === "/") {
     return <TableRequiredPage />;
   }
 
-  if (!isTableRoute && location !== "/") {
+  if (!isTableRoute && !isCartRoute && !isCheckoutRoute && !isPaymentRoute && !isOrderSuccessRoute) {
     return <NotFoundPage />;
   }
+
+  const showCartBar = isTableRoute;
 
   return (
     <>
       <Switch>
         <Route path="/" component={MenuPage} />
         <Route path="/t/:tableId" component={MenuPage} />
-        <Route path="/cart" component={CartPage} />
-        <Route path="/checkout" component={CheckoutPage} />
-        <Route path="/payment" component={PaymentPage} />
-        <Route path="/order-success" component={OrderSuccessPage} />
+        <Route path="/t/:tableId/cart" component={CartPage} />
+        <Route path="/t/:tableId/checkout" component={CheckoutPage} />
+        <Route path="/t/:tableId/payment" component={PaymentPage} />
+        <Route path="/t/:tableId/order-success" component={OrderSuccessPage} />
         <Route component={NotFoundPage} />
       </Switch>
-      <CartBar />
+      {showCartBar && <CartBar />}
     </>
   );
 }
@@ -48,7 +72,6 @@ function AppRoutes() {
 export default function App() {
   useEffect(() => {
     let lastTouchEnd = 0;
-
     const handleTouchEnd = (event) => {
       if (!event.cancelable) return;
       const now = Date.now();
@@ -57,7 +80,6 @@ export default function App() {
       }
       lastTouchEnd = now;
     };
-
     document.addEventListener("touchend", handleTouchEnd, { passive: false });
     return () => document.removeEventListener("touchend", handleTouchEnd);
   }, []);

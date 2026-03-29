@@ -1,24 +1,29 @@
-import { useLocation } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useCart } from "../hooks/useCart";
 
 export function CartBar() {
   const [location, navigate] = useLocation();
+  const { tableId } = useParams();
   const { totalItems, grandTotal } = useCart();
 
+  const storedTableId = typeof window !== "undefined" ? localStorage.getItem("tableId") : null;
+  const currentTableId = tableId || storedTableId;
+
   const isHidden =
-    location === "/cart" ||
-    location === "/checkout" ||
-    location === "/payment" ||
-    location === "/order-success";
+    location?.includes("/cart") ||
+    location?.includes("/checkout") ||
+    location?.includes("/payment") ||
+    location?.includes("/order-success");
 
   if (isHidden) return null;
   if (totalItems === 0) return null;
+  if (!currentTableId) return null;
 
   return (
     <div className="cartBarOuter cartBarOuter--visible">
       <button
         className="cartBar pressable"
-        onClick={() => navigate("/cart")}
+        onClick={() => navigate(`/t/${currentTableId}/cart`)}
         aria-label={`View cart — ${totalItems} item${totalItems === 1 ? "" : "s"}, ₹${Math.round(grandTotal)}`}
       >
         <div className="cartBarLeft">

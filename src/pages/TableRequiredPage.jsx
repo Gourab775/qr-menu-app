@@ -35,10 +35,7 @@ export function TableRequiredPage() {
               textAlign: 'center',
             }}
           />
-          <button
-            type="submit"
-            className="btn primary pressable"
-          >
+          <button type="submit" className="btn primary pressable">
             Continue
           </button>
         </form>
